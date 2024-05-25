@@ -51,9 +51,15 @@ export class EditorService {
 
   async loadMonaco(): Promise<Monaco> {
     await this.getAmdLoader(this.config.baseUrl || '/assets');
-    return this.loadMonacoModule(['vs/editor/editor.main']).then(
-      (monaco) => (this._monaco = monaco)
-    );
+    return this.loadMonacoModule(['vs/editor/editor.main']).then((monaco) => {
+      this._monaco = monaco;
+
+      if (typeof this.config.onMonacoLoad === 'function') {
+        this.config.onMonacoLoad();
+      }
+
+      return monaco;
+    });
   }
 
   create(el: HTMLElement, options?: NgEditorOptions): NgEditor {

@@ -1,6 +1,13 @@
 <h1>IT WORKS</h1>
 
-<ngx-monaco-editor [options]="options"></ngx-monaco-editor>
-
 <button type="button" (click)="changeLanguage()">Change language</button>
 <button type="button" (click)="changeTheme()">Change theme</button>
+<button type="button" (click)="showSecond.set(!showSecond())">
+  Show second
+</button>
+
+<ngx-monaco-editor [options]="options"></ngx-monaco-editor>
+
+@if(showSecond() ) {
+<ngx-monaco-editor [options]="options"></ngx-monaco-editor>
+}

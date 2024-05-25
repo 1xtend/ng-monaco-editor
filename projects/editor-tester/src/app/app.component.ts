@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MonacoEditorComponent } from '../../../editor/src/public-api';
-import { NgEditorModel } from '../../../editor/src/lib/types';
+import { NgEditorModel, NgEditorOptions } from '../../../editor/src/lib/types';
 
 @Component({
   selector: 'app-root',
@@ -13,11 +13,13 @@ import { NgEditorModel } from '../../../editor/src/lib/types';
 export class AppComponent {
   title = 'editor-tester';
 
-  options = {
+  options: NgEditorOptions = {
     value: '.css { color: red }',
-    language: 'css',
+    language: 'typescript',
     theme: 'vs-dark',
   };
+
+  showSecond = signal<boolean>(false);
 
   changeLanguage(): void {
     if (this.options.language === 'css') {

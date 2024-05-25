@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   InputSignal,
   NgZone,
@@ -18,6 +19,10 @@ import {
 } from '@angular/core';
 import { Monaco, NgEditor, NgEditorModel, NgEditorOptions } from './types';
 import { EditorService } from './editor.service';
+import { delay, fromEvent } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { observeResize } from './helpers/observe-resize';
+import { NG_MONACO_EDITOR_CONFIG, NgMonacoEditorConfig } from './config';
 
 declare const monaco: Monaco;
 
@@ -32,23 +37,25 @@ export class MonacoEditorComponent
   implements OnInit, AfterViewInit, OnDestroy, OnChanges
 {
   private editorService = inject(EditorService);
+  private zone = inject(NgZone);
+  private destroyRef = inject(DestroyRef);
+  private config: NgMonacoEditorConfig = inject(NG_MONACO_EDITOR_CONFIG);
 
   private editorRef = viewChild<ElementRef<HTMLElement>>('editorEl');
 
   private _editor?: NgEditor;
+  private _value: string = '';
 
   options = input<NgEditorOptions>();
   model = input<NgEditorModel>();
 
   constructor() {
     effect(() => {
-      console.log('opt changed', this.options());
-
       const options = this.options();
 
       if (this._editor) {
         this._editor.dispose();
-        this.createEditor();
+        this.loadEditor(options);
       }
     });
   }
@@ -68,19 +75,30 @@ export class MonacoEditorComponent
     }
   }
 
-  private loadMonaco() {
+  private loadMonaco(): void {
     this.editorService.initMonaco().then(() => {
-      console.log('monaco', monaco);
-      this.createEditor();
+      this.loadEditor(this.options());
     });
   }
 
-  private createEditor() {
+  private loadEditor(options?: NgEditorOptions): void {
     const editor = this.editorRef()?.nativeElement;
 
     if (editor) {
-      this._editor = this.editorService.create(editor, this.options());
+      this._editor = this.editorService.create(editor, options);
+      this._value = this._editor.getValue();
+      this.resizeEditor(editor);
     }
+  }
+
+  private resizeEditor(editor: HTMLElement): void {
+    const interval = this.config.autoLayoutInterval || 100;
+
+    observeResize(editor)
+      .pipe(takeUntilDestroyed(this.destroyRef), delay(interval))
+      .subscribe(() => {
+        this._editor?.layout();
+      });
   }
 
   // private loadMonaco(): void {

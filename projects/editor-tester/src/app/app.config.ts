@@ -3,12 +3,20 @@ import {
   NG_MONACO_EDITOR_CONFIG,
   NgMonacoEditorConfig,
 } from '../../../editor/src/lib/config';
+import { Monaco } from '../../../editor/src/lib/types';
+
+declare const monaco: Monaco;
 
 const config: NgMonacoEditorConfig = {
   defaultOptions: {
     // theme: 'vs-dark',
   },
   onMonacoLoad: () => {
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: true,
+    });
+
     console.log('onMonacoLoad was called');
   },
 };
