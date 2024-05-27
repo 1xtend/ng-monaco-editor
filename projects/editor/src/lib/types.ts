@@ -1,4 +1,4 @@
-import type { editor } from 'monaco-editor';
+import type { Uri, editor } from 'monaco-editor';
 
 export interface NgEditorModel {
   value: string;
@@ -8,6 +8,7 @@ export interface NgEditorModel {
 
 export type Monaco = typeof import('monaco-editor');
 export type NgEditorOptions = editor.IStandaloneEditorConstructionOptions;
+// export type NgEditorModel = editor.IModel;
 export type NgEditor = editor.IStandaloneCodeEditor;
 
 declare global {

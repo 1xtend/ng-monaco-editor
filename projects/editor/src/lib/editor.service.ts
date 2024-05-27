@@ -1,6 +1,13 @@
-import { Injectable, inject } from '@angular/core';
-import { Monaco, NgEditor, NgEditorOptions, Require } from './types';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import {
+  Monaco,
+  NgEditor,
+  NgEditorModel,
+  NgEditorOptions,
+  Require,
+} from './types';
 import { NG_MONACO_EDITOR_CONFIG, NgMonacoEditorConfig } from './config';
+import { editor } from 'monaco-editor';
 
 @Injectable({
   providedIn: 'root',
@@ -64,6 +71,16 @@ export class EditorService {
 
   create(el: HTMLElement, options?: NgEditorOptions): NgEditor {
     return this.monaco.editor.create(el, this.getOptions(options));
+  }
+
+  createModel(
+    value: string,
+    language?: string,
+    uri?: string
+  ): editor.ITextModel {
+    const modelUri = uri ? this.monaco.Uri.parse(uri) : undefined;
+
+    return this.monaco.editor.createModel(value, language, modelUri);
   }
 
   getOptions(options?: NgEditorOptions): NgEditorOptions {

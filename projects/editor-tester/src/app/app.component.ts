@@ -1,25 +1,66 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MonacoEditorComponent } from '../../../editor/src/public-api';
-import { NgEditorModel, NgEditorOptions } from '../../../editor/src/lib/types';
+import {
+  NgEditor,
+  NgEditorModel,
+  NgEditorOptions,
+} from '../../../editor/src/lib/types';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MonacoEditorComponent],
+  imports: [
+    RouterOutlet,
+    MonacoEditorComponent,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'editor-tester';
 
   options: NgEditorOptions = {
-    value: '.css { color: red }',
-    language: 'typescript',
     theme: 'vs-dark',
   };
 
+  uri: string = '';
+
+  disabled: boolean = false;
+
   showSecond = signal<boolean>(false);
+
+  form!: FormGroup;
+
+  value: string = '.css { gap: 10px; }';
+
+  options1: NgEditorOptions = {
+    theme: 'vs-light',
+    value: '.car {gap: 1px;}',
+    language: 'css',
+  };
+
+  onChange(e: Event): void {
+    console.log(e);
+  }
+
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      editor: new FormControl('value', { nonNullable: true }),
+    });
+
+    this.form.valueChanges.subscribe((value) => {
+      console.log('form value changes: ', value);
+    });
+  }
 
   changeLanguage(): void {
     if (this.options.language === 'css') {
@@ -47,5 +88,9 @@ export class AppComponent {
         theme: 'vs-dark',
       };
     }
+  }
+
+  disable() {
+    this.disabled = !this.disabled;
   }
 }

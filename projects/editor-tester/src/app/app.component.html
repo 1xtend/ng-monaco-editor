@@ -6,8 +6,16 @@
   Show second
 </button>
 
-<ngx-monaco-editor [options]="options"></ngx-monaco-editor>
+<form [formGroup]="form">
+  <ngx-monaco-editor
+    [options]="options"
+    formControlName="editor"
+  ></ngx-monaco-editor>
+</form>
 
 @if(showSecond() ) {
-<ngx-monaco-editor [options]="options"></ngx-monaco-editor>
+<ngx-monaco-editor [options]="options" [(ngModel)]="value"></ngx-monaco-editor>
 }
+
+<ngx-monaco-editor [options]="options1" (change)="onChange($event)"></ngx-monaco-editor>
+
