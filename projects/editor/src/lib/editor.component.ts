@@ -4,14 +4,8 @@ import {
   Component,
   DestroyRef,
   ElementRef,
-  InputSignal,
   NgZone,
-  OnChanges,
   OnDestroy,
-  OnInit,
-  Signal,
-  SimpleChanges,
-  computed,
   effect,
   forwardRef,
   inject,
@@ -19,9 +13,14 @@ import {
   output,
   viewChild,
 } from '@angular/core';
-import { Monaco, NgEditor, NgEditorModel, NgEditorOptions } from './types';
+import {
+  Monaco,
+  NgEditor,
+  NgEditorChangeEvent,
+  NgEditorOptions,
+} from './types';
 import { EditorService } from './editor.service';
-import { delay, fromEvent } from 'rxjs';
+import { delay } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { observeResize } from './helpers/observe-resize';
 import { NG_MONACO_EDITOR_CONFIG, NgMonacoEditorConfig } from './config';
@@ -44,9 +43,7 @@ declare const monaco: Monaco;
     },
   ],
 })
-export class MonacoEditorComponent
-  implements OnInit, AfterViewInit, OnDestroy, OnChanges
-{
+export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   private editorService = inject(EditorService);
   private zone = inject(NgZone);
   private destroyRef = inject(DestroyRef);
@@ -63,11 +60,17 @@ export class MonacoEditorComponent
   uri = input<string>('');
 
   loading = output<boolean>();
-  editorChange = output<NgEditor>();
+  editorLoad = output<NgEditor>();
+  editorChange = output<NgEditorChangeEvent>();
+  editorBlur = output<void>();
 
   get value() {
     return this._value;
   }
+
+  onTouched = () => {};
+
+  onChange = (value: string) => {};
 
   constructor() {
     effect(() => {
@@ -81,13 +84,9 @@ export class MonacoEditorComponent
     });
   }
 
-  ngOnInit(): void {}
-
   ngAfterViewInit(): void {
     this.loadMonaco();
   }
-
-  ngOnChanges(changes: SimpleChanges): void {}
 
   ngOnDestroy(): void {
     this.dispose();
@@ -113,17 +112,16 @@ export class MonacoEditorComponent
   private loadEditor(options?: NgEditorOptions, uri?: string): void {
     const editor = this.editorRef()?.nativeElement;
 
-    this._model = this.createModel(this.value, options?.language, uri);
+    if (!editor) return;
 
-    if (editor) {
-      this._editor = this.editorService.create(editor, {
-        ...options,
-        model: this._model,
-      });
-      this.resizeEditor(editor);
-      this.listenToModelChanges();
-      this.editorChange.emit(this._editor);
-    }
+    this._model = this.createModel(this.value, options?.language, uri);
+    this._editor = this.editorService.create(editor, {
+      ...options,
+      model: this._model,
+    });
+    this.resizeEditor(editor);
+    this.listenToModelChanges();
+    this.editorLoad.emit(this._editor);
   }
 
   private createModel(value: string, language?: string, uri?: string) {
@@ -156,7 +154,16 @@ export class MonacoEditorComponent
         }
 
         this.onChange(value);
+        this.editorChange.emit({
+          editor: editor,
+          model: model,
+          value,
+        });
         this._value = value;
+      }),
+      editor.onDidBlurEditorWidget(() => {
+        this.editorBlur.emit();
+        this.onTouched();
       }),
     ];
   }
@@ -181,10 +188,6 @@ export class MonacoEditorComponent
     }
   }
 
-  onTouched = () => {};
-
-  onChange = (value: string) => {};
-
   registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
@@ -192,118 +195,4 @@ export class MonacoEditorComponent
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
-
-  // private loadMonaco(): void {
-  //   if ((<any>window).monaco) {
-  //     this.initEditor(this.editorOptions());
-  //   } else {
-  //     const onGotAmdLoader = () => {
-  //       if ((<any>window).monaco) {
-  //         this.initEditor(this.editorOptions());
-  //       } else {
-  //         // Create path to vs folder
-  //         (<any>window).require.config({
-  //           paths: { vs: '/assets/monaco-editor/min/vs' },
-  //         });
-  //         // Import editor.main file
-  //         (<any>window).require(['vs/editor/editor.main'], () => {
-  //           this.initEditor(this.editorOptions());
-  //         });
-  //       }
-  //     };
-
-  //     if (!(<any>window).require) {
-  //       const scriptEl = document.createElement('script');
-  //       scriptEl.type = 'text/javascript';
-  //       scriptEl.src = './assets/monaco-editor/min/vs/loader.js';
-  //       scriptEl.addEventListener('load', onGotAmdLoader);
-  //       document.body.appendChild(scriptEl);
-  //     } else {
-  //       onGotAmdLoader();
-  //     }
-  //   }
-  // }
-
-  // private initEditor(options: any): void {
-  //   const editorEl = this.editorRef()?.nativeElement;
-
-  //   if (editorEl) {
-  //     this._editor = this.monaco.editor.create(editorEl, options);
-  //   }
-  // }
-
-  // options: InputSignal<any> = input();
-  // model: InputSignal<NgxEditorModel | undefined> = input();
-
-  // private editorRef = viewChild<ElementRef<HTMLElement>>('editorEl');
-  // private editorConfig: NgxMonacoEditorConfig = inject(
-  //   NGX_MONACO_EDITOR_CONFIG
-  // );
-  // private _editor: any;
-
-  // constructor() {}
-
-  // ngOnInit(): void {}
-
-  // ngAfterViewInit(): void {
-  //   this.loadMonaco();
-  // }
-
-  // ngOnDestroy(): void {
-  //   if (this._editor) {
-  //     this._editor.dispose();
-  //   }
-  // }
-
-  // private loadMonaco(): void {
-  //   // If library is loaded init editor
-  //   if ((<any>window).monaco) {
-  //     this.initMonaco();
-  //   } else {
-  //     const baseUrl = this.editorConfig.baseUrl || './assets';
-
-  //     // If monaco is not loaded -- load
-  //     const onGotAmdLoader = () => {
-  //       if ((<any>window).monaco) {
-  //         console.log('Monaco exists');
-  //         this.initMonaco();
-  //       } else {
-  //         // Configure path to monaco-editor
-  //         (<any>window).require.config({
-  //           paths: { vs: baseUrl + '/monaco-editor/min/vs' },
-  //         });
-  //         // Load main file and then init monaco-editor
-  //         (<any>window).require(['vs/editor/editor.main'], () => {
-  //           if (typeof this.editorConfig.onMonacoLoad === 'function') {
-  //             this.editorConfig.onMonacoLoad();
-  //           }
-
-  //           this.initMonaco();
-  //         });
-  //       }
-  //     };
-
-  //     // Load require if it's not loaded yet
-  //     if (!(<any>window).require) {
-  //       const loaderScript = document.createElement('script');
-  //       loaderScript.type = 'text/javascript';
-  //       loaderScript.src = baseUrl + '/monaco-editor/min/vs/loader.js';
-  //       loaderScript.addEventListener('load', onGotAmdLoader);
-  //       document.body.appendChild(loaderScript);
-  //     } else {
-  //       onGotAmdLoader();
-  //     }
-  //   }
-  // }
-
-  // private initMonaco(): void {
-  //   const editor = this.editorRef()?.nativeElement;
-
-  //   if (editor) {
-  //     this._editor = monaco.editor.create(editor, {
-  //       ...this.options(),
-  //       model: this.model() || monaco.editor.createModel('', 'javascript'),
-  //     });
-  //   }
-  // }
 }

@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { MonacoEditorComponent } from '../../../editor/src/public-api';
 import {
   NgEditor,
+  NgEditorChangeEvent,
   NgEditorModel,
   NgEditorOptions,
 } from '../../../editor/src/lib/types';
@@ -48,7 +49,7 @@ export class AppComponent implements OnInit {
     language: 'css',
   };
 
-  onChange(e: Event): void {
+  onChange(e: NgEditorChangeEvent): void {
     console.log(e);
   }
 

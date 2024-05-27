@@ -8,8 +8,12 @@ export interface NgEditorModel {
 
 export type Monaco = typeof import('monaco-editor');
 export type NgEditorOptions = editor.IStandaloneEditorConstructionOptions;
-// export type NgEditorModel = editor.IModel;
 export type NgEditor = editor.IStandaloneCodeEditor;
+export interface NgEditorChangeEvent {
+  editor: NgEditor;
+  model: editor.IModel;
+  value: string;
+}
 
 declare global {
   interface Window {

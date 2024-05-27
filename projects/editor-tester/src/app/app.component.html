@@ -1,8 +1,8 @@
 <h1>IT WORKS</h1>
 
-<button type="button" (click)="changeLanguage()">Change language</button>
-<button type="button" (click)="changeTheme()">Change theme</button>
-<button type="button" (click)="showSecond.set(!showSecond())">
+<button (click)="changeLanguage()" type="button">Change language</button>
+<button (click)="changeTheme()" type="button">Change theme</button>
+<button (click)="showSecond.set(!showSecond())" type="button">
   Show second
 </button>
 
@@ -17,5 +17,7 @@
 <ngx-monaco-editor [options]="options" [(ngModel)]="value"></ngx-monaco-editor>
 }
 
-<ngx-monaco-editor [options]="options1" (change)="onChange($event)"></ngx-monaco-editor>
-
+<ngx-monaco-editor
+  [options]="options1"
+  (editorChange)="onChange($event)"
+></ngx-monaco-editor>
