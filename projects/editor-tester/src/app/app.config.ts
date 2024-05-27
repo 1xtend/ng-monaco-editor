@@ -3,7 +3,7 @@ import {
   NG_MONACO_EDITOR_CONFIG,
   NgMonacoEditorConfig,
 } from '../../../editor/src/lib/config';
-import { Monaco } from '../../../editor/src/lib/models/types';
+import { Monaco } from '../../../editor/src/lib/models/global.types';
 
 declare const monaco: Monaco;
 

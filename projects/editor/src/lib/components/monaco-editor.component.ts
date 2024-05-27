@@ -15,24 +15,24 @@ import {
   viewChild,
 } from '@angular/core';
 import {
-  Monaco,
   NgEditor,
   NgEditorChangeEvent,
   NgEditorOptions,
-} from '../models/types';
+} from '../models/editor.types';
 import { debounce, debounceTime, delay } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { observeResize } from '../helpers/observe-resize';
 import { NG_MONACO_EDITOR_CONFIG, NgMonacoEditorConfig } from '../config';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IDisposable, editor } from 'monaco-editor';
+import { Monaco } from '../models/global.types';
 
 declare const monaco: Monaco;
 
 @Component({
   selector: 'ng-monaco-editor',
   standalone: true,
-  template: ` <div style="height: 300px;" #editorEl></div> `,
+  template: `<div style="height: 300px;" #editorEl></div>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {

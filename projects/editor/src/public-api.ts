@@ -3,4 +3,4 @@
  */
 
 export * from './lib/services/monaco-editor.service';
-export * from './lib/components/editor.component';
+export * from './lib/components/monaco-editor.component';

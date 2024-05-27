@@ -5,7 +5,7 @@ import {
   NgEditor,
   NgEditorChangeEvent,
   NgEditorOptions,
-} from '../../../editor/src/lib/models/types';
+} from '../../../editor/src/lib/models/editor.types';
 import {
   FormControl,
   FormGroup,

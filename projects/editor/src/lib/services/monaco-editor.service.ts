@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { Monaco, NgEditor, NgEditorOptions, Require } from '../models/types';
+import { NgEditor, NgEditorOptions } from '../models/editor.types';
 import { NG_MONACO_EDITOR_CONFIG, NgMonacoEditorConfig } from '../config';
-import { editor } from 'monaco-editor';
+import { Monaco, Require } from '../models/global.types';
 
 @Injectable({
   providedIn: 'root',
