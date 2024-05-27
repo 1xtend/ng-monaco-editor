@@ -1,3 +1,4 @@
+import { MonacoEditorService } from '../services/monaco-editor.service';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -18,21 +19,19 @@ import {
   NgEditor,
   NgEditorChangeEvent,
   NgEditorOptions,
-} from './types';
-import { EditorService } from './editor.service';
-import { delay } from 'rxjs';
+} from '../models/types';
+import { debounce, debounceTime, delay } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { observeResize } from './helpers/observe-resize';
-import { NG_MONACO_EDITOR_CONFIG, NgMonacoEditorConfig } from './config';
+import { observeResize } from '../helpers/observe-resize';
+import { NG_MONACO_EDITOR_CONFIG, NgMonacoEditorConfig } from '../config';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IDisposable, Uri, editor } from 'monaco-editor';
+import { IDisposable, editor } from 'monaco-editor';
 
 declare const monaco: Monaco;
 
 @Component({
-  selector: 'ngx-monaco-editor',
+  selector: 'ng-monaco-editor',
   standalone: true,
-  imports: [],
   template: ` <div style="height: 300px;" #editorEl></div> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -44,8 +43,7 @@ declare const monaco: Monaco;
   ],
 })
 export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
-  private editorService = inject(EditorService);
-  private zone = inject(NgZone);
+  private monacoEditorService = inject(MonacoEditorService);
   private destroyRef = inject(DestroyRef);
   private config: NgMonacoEditorConfig = inject(NG_MONACO_EDITOR_CONFIG);
 
@@ -92,14 +90,10 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.dispose();
   }
 
-  setDisabledState(disabled: boolean): void {
-    // this.disabled = disabled;
-  }
-
   private loadMonaco(): void {
     this.loading.emit(true);
 
-    this.editorService.initMonaco().then(() => {
+    this.monacoEditorService.initMonaco().then(() => {
       const options = this.options();
       const uri = this.uri();
 
@@ -115,7 +109,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     if (!editor) return;
 
     this._model = this.createModel(this.value, options?.language, uri);
-    this._editor = this.editorService.create(editor, {
+    this._editor = this.monacoEditorService.create(editor, {
       ...options,
       model: this._model,
     });
@@ -135,7 +129,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     const interval = this.config.autoLayoutInterval || 100;
 
     observeResize(editor)
-      .pipe(takeUntilDestroyed(this.destroyRef), delay(interval))
+      .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(interval))
       .subscribe(() => {
         this._editor?.layout();
       });

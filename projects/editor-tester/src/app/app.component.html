@@ -7,17 +7,17 @@
 </button>
 
 <form [formGroup]="form">
-  <ngx-monaco-editor
+  <ng-monaco-editor
     [options]="options"
     formControlName="editor"
-  ></ngx-monaco-editor>
+  ></ng-monaco-editor>
 </form>
 
 @if(showSecond() ) {
-<ngx-monaco-editor [options]="options" [(ngModel)]="value"></ngx-monaco-editor>
+<ng-monaco-editor [options]="options" [(ngModel)]="value"></ng-monaco-editor>
 }
 
-<ngx-monaco-editor
+<ng-monaco-editor
   [options]="options1"
   (editorChange)="onChange($event)"
-></ngx-monaco-editor>
+></ng-monaco-editor>

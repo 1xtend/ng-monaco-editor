@@ -2,5 +2,5 @@
  * Public API Surface of editor
  */
 
-export * from './lib/editor.service';
-export * from './lib/editor.component';
+export * from './lib/services/monaco-editor.service';
+export * from './lib/components/editor.component';

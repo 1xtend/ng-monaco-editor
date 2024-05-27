@@ -4,9 +4,8 @@ import { MonacoEditorComponent } from '../../../editor/src/public-api';
 import {
   NgEditor,
   NgEditorChangeEvent,
-  NgEditorModel,
   NgEditorOptions,
-} from '../../../editor/src/lib/types';
+} from '../../../editor/src/lib/models/types';
 import {
   FormControl,
   FormGroup,
@@ -44,7 +43,7 @@ export class AppComponent implements OnInit {
   value: string = '.css { gap: 10px; }';
 
   options1: NgEditorOptions = {
-    theme: 'vs-light',
+    // theme: 'vs-light',
     value: '.car {gap: 1px;}',
     language: 'css',
   };
