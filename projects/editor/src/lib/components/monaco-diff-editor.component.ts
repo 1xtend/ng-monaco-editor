@@ -61,6 +61,7 @@ export class MonacoDiffEditorComponent extends AbstractEditorBaseComponent {
       !originalValue.isFirstChange() &&
       originalValue.previousValue !== originalValue.currentValue
     ) {
+      this._originalModel?.dispose();
       this.loadEditor();
     }
   }

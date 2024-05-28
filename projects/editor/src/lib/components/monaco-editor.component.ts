@@ -1,34 +1,8 @@
-import { MonacoEditorService } from '../services/monaco-editor.service';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  ElementRef,
-  NgZone,
-  OnDestroy,
-  effect,
-  forwardRef,
-  inject,
-  input,
-  output,
-  viewChild,
-} from '@angular/core';
-import {
-  NgEditor,
-  NgEditorChangeEvent,
-  NgEditorOptions,
-} from '../models/editor.types';
-import { debounce, debounceTime, delay } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { observeResize } from '../helpers/observe-resize';
-import { NG_MONACO_EDITOR_CONFIG, NgMonacoEditorConfig } from '../config';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IDisposable, editor } from 'monaco-editor';
+import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
+import { NgEditor, NgEditorOptions } from '../models/editor.types';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Monaco } from '../models/global.types';
 import { AbstractEditorBaseComponent } from './abstract-editor-base.component';
-
-declare const monaco: Monaco;
 
 @Component({
   selector: 'ng-monaco-editor',

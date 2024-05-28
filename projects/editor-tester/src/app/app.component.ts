@@ -53,6 +53,10 @@ export class AppComponent implements OnInit {
     this.diffOriginalValue = 'changed value ' + Math.random().toString();
   }
 
+  onLoad(e: NgEditor): void {
+    console.log('EDITOR LOADED', e);
+  }
+
   changeTheme(): void {
     if (this.options.theme === 'vs-dark') {
       this.options = {

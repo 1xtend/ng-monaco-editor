@@ -14,6 +14,7 @@ import { ControlValueAccessor } from '@angular/forms';
 import {
   NgEditor,
   NgEditorChangeEvent,
+  NgEditorModel,
   NgEditorOptions,
 } from '../models/editor.types';
 import { IDisposable, editor } from 'monaco-editor';
@@ -37,11 +38,11 @@ export abstract class AbstractEditorBaseComponent
   private config: NgMonacoEditorConfig = inject(NG_MONACO_EDITOR_CONFIG);
 
   protected editorRef = viewChild<ElementRef<HTMLElement>>('editorEl');
+
   protected _editor?: NgEditor;
   protected _value: string = '';
-  protected _model?: editor.IModel;
+  protected _model?: NgEditorModel;
   protected _options?: NgEditorOptions;
-  protected _prevOptions?: NgEditorOptions;
   protected _uri?: string;
   protected _disposables: IDisposable[] = [];
   protected _isMonacoLoaded: boolean = false;
@@ -69,10 +70,6 @@ export abstract class AbstractEditorBaseComponent
     uri?: string
   ): NgEditor;
 
-  onTouched = () => {};
-
-  onChange = (value: string) => {};
-
   ngOnInit(): void {
     this.loadEditor();
   }
@@ -89,7 +86,6 @@ export abstract class AbstractEditorBaseComponent
       !this.isEqual(options.previousValue, options.currentValue)
     ) {
       this._options = options.currentValue as NgEditorOptions;
-
       this.rootEditor?.updateOptions(this._options);
     }
   }
@@ -121,7 +117,7 @@ export abstract class AbstractEditorBaseComponent
     this._editor = this.createEditor(editor, this._options, this._uri);
     this.resizeEditor(editor);
     this.listenToModelChanges();
-    this.editorLoad.emit(this._editor!);
+    this.editorLoad.emit(this._editor);
   }
 
   protected createModel(value: string, uri?: string) {
@@ -137,7 +133,7 @@ export abstract class AbstractEditorBaseComponent
     observeResize(editor)
       .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(interval))
       .subscribe(() => {
-        this._editor?.layout();
+        this.rootEditor?.layout();
       });
   }
 
@@ -178,6 +174,10 @@ export abstract class AbstractEditorBaseComponent
     this._disposables.forEach((disposable) => disposable.dispose());
     this._disposables = [];
   }
+
+  onTouched = () => {};
+
+  onChange = (value: string) => {};
 
   registerOnChange(fn: () => void): void {
     this.onChange = fn;
