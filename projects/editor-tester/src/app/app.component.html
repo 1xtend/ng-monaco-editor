@@ -8,11 +8,11 @@
 <button type="button" (click)="changeUri()">change uri</button>
 
 <form [formGroup]="form">
-  <!-- <ng-monaco-editor
+  <ng-monaco-editor
     [options]="options"
     [uri]="uri"
     formControlName="editor"
-  ></ng-monaco-editor> -->
+  ></ng-monaco-editor>
   <ng-monaco-diff-editor
     formControlName="diffEditor"
     [options]="options"

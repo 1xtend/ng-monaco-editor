@@ -1,13 +1,15 @@
 import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
 import { NgEditor, NgEditorOptions } from '../models/editor.types';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Monaco } from '../models/global.types';
 import { AbstractEditorBaseComponent } from './abstract-editor-base.component';
 
 @Component({
   selector: 'ng-monaco-editor',
   standalone: true,
-  template: `<div style="height: 300px;" #editorEl></div>`,
+  template: `<div
+    class="ng-monaco-editor-wrapper ng-monaco-editor"
+    #editorEl
+  ></div>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -15,6 +17,19 @@ import { AbstractEditorBaseComponent } from './abstract-editor-base.component';
       useExisting: forwardRef(() => MonacoEditorComponent),
       multi: true,
     },
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+        height: 300px;
+      }
+
+      .ng-monaco-editor-wrapper {
+        width: 100%;
+        height: 100%;
+      }
+    `,
   ],
 })
 export class MonacoEditorComponent extends AbstractEditorBaseComponent {
