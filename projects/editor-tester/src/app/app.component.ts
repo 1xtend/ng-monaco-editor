@@ -12,6 +12,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { MonacoDiffEditorComponent } from '../../../editor/src/lib/components/monaco-diff-editor.component';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ import {
   imports: [
     RouterOutlet,
     MonacoEditorComponent,
+    MonacoDiffEditorComponent,
     ReactiveFormsModule,
     FormsModule,
   ],
@@ -26,35 +28,20 @@ import {
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  title = 'editor-tester';
+  form!: FormGroup;
+
+  diffOptions: NgEditorOptions = {};
+  diffOriginalValue: string = 'diff original value';
 
   options: NgEditorOptions = {
     theme: 'vs-dark',
   };
-
-  uri: string = '';
-
-  disabled: boolean = false;
-
-  showSecond = signal<boolean>(false);
-
-  form!: FormGroup;
-
-  value: string = '.css { gap: 10px; }';
-
-  options1: NgEditorOptions = {
-    // theme: 'vs-light',
-    value: '.car {gap: 1px;}',
-    language: 'css',
-  };
-
-  onChange(e: NgEditorChangeEvent): void {
-    console.log(e);
-  }
+  uri: string = '///file';
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      editor: new FormControl('value', { nonNullable: true }),
+      editor: new FormControl('editor value', { nonNullable: true }),
+      diffEditor: new FormControl('diff editor value', { nonNullable: true }),
     });
 
     this.form.valueChanges.subscribe((value) => {
@@ -62,18 +49,8 @@ export class AppComponent implements OnInit {
     });
   }
 
-  changeLanguage(): void {
-    if (this.options.language === 'css') {
-      this.options = {
-        ...this.options,
-        language: 'html',
-      };
-    } else {
-      this.options = {
-        ...this.options,
-        language: 'css',
-      };
-    }
+  changeOriginalValue(): void {
+    this.diffOriginalValue = 'changed value ' + Math.random().toString();
   }
 
   changeTheme(): void {
@@ -88,9 +65,14 @@ export class AppComponent implements OnInit {
         theme: 'vs-dark',
       };
     }
+
+    // this.options = {
+    //   ...this.options,
+    //   theme: 'vs-dark',
+    // };
   }
 
-  disable() {
-    this.disabled = !this.disabled;
+  changeUri(): void {
+    this.uri = '///file-' + Math.random();
   }
 }

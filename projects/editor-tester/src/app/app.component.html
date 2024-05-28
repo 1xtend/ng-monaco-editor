@@ -1,23 +1,22 @@
 <h1>IT WORKS</h1>
 
-<button (click)="changeLanguage()" type="button">Change language</button>
-<button (click)="changeTheme()" type="button">Change theme</button>
-<button (click)="showSecond.set(!showSecond())" type="button">
-  Show second
+<button type="button" (click)="changeOriginalValue()">
+  change originial value
 </button>
+
+<button type="button" (click)="changeTheme()">change theme</button>
+<button type="button" (click)="changeUri()">change uri</button>
 
 <form [formGroup]="form">
   <ng-monaco-editor
     [options]="options"
+    [uri]="uri"
     formControlName="editor"
   ></ng-monaco-editor>
+  <ng-monaco-diff-editor
+    formControlName="diffEditor"
+    [options]="options"
+    [originalValue]="diffOriginalValue"
+    [uri]="uri"
+  ></ng-monaco-diff-editor>
 </form>
-
-@if(showSecond() ) {
-<ng-monaco-editor [options]="options" [(ngModel)]="value"></ng-monaco-editor>
-}
-
-<ng-monaco-editor
-  [options]="options1"
-  (editorChange)="onChange($event)"
-></ng-monaco-editor>

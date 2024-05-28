@@ -1,5 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { NgEditor, NgEditorOptions } from '../models/editor.types';
+import {
+  NgDiffEditor,
+  NgEditor,
+  NgEditorOptions,
+} from '../models/editor.types';
 import { NG_MONACO_EDITOR_CONFIG, NgMonacoEditorConfig } from '../config';
 import { Monaco, Require } from '../models/global.types';
 
@@ -67,10 +71,16 @@ export class MonacoEditorService {
     });
   }
 
-  create(el: HTMLElement, options?: NgEditorOptions): NgEditor {
+  createEditor(el: HTMLElement, options?: NgEditorOptions): NgEditor {
     this.assertMonaco();
 
     return this.monaco.editor.create(el, this.getOptions(options));
+  }
+
+  createDiffEditor(el: HTMLElement, options?: NgEditorOptions): NgDiffEditor {
+    this.assertMonaco();
+
+    return this.monaco.editor.createDiffEditor(el, this.getOptions(options));
   }
 
   getOptions(options?: NgEditorOptions): NgEditorOptions {
