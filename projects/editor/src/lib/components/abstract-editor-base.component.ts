@@ -71,6 +71,9 @@ export abstract class AbstractEditorBaseComponent
   ): NgEditor;
 
   ngOnInit(): void {
+    this._options = this.options();
+    this._uri = this.uri();
+
     this.loadEditor();
   }
 

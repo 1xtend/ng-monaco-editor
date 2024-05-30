@@ -1,23 +1,18 @@
-<h1>IT WORKS</h1>
+<div class="wrapper">
+  <h1>Angular Monaco Editor</h1>
 
-<button type="button" (click)="changeOriginalValue()">
-  change originial value
-</button>
-
-<button type="button" (click)="changeTheme()">change theme</button>
-<button type="button" (click)="changeUri()">change uri</button>
-
-<form [formGroup]="form">
+  <h3>Editor component</h3>
   <ng-monaco-editor
-    [options]="options"
-    [uri]="uri"
-    formControlName="editor"
+    [options]="editorOptions"
+    [(ngModel)]="editorValue"
+    class="editor"
   ></ng-monaco-editor>
+
+  <h3>Diff Editor component</h3>
   <ng-monaco-diff-editor
-    formControlName="diffEditor"
-    [options]="options"
+    [options]="diffEditorOptions"
     [originalValue]="diffOriginalValue"
-    [uri]="uri"
-    (editorLoad)="onLoad($event)"
+    [formControl]="diffEditorControl"
+    class="editor"
   ></ng-monaco-diff-editor>
-</form>
+</div>

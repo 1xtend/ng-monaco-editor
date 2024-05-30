@@ -32,7 +32,7 @@ export class MonacoEditorService {
     return new Promise<Monaco>((resolve) => this.require!(deps, resolve));
   }
 
-  private getAmdLoader(baseUrl: string): Promise<void> {
+  private async getAmdLoader(baseUrl: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       if (this.monaco && this.require) {
         return resolve();
