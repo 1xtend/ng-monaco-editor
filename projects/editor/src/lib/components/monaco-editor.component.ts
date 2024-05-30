@@ -6,10 +6,9 @@ import { AbstractEditorBaseComponent } from './abstract-editor-base.component';
 @Component({
   selector: 'ng-monaco-editor',
   standalone: true,
-  template: `<div
-    class="ng-monaco-editor-wrapper ng-monaco-editor"
-    #editorEl
-  ></div>`,
+  template: `
+    <div class="ng-monaco-editor-wrapper ng-monaco-editor" #editorEl></div>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {

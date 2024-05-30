@@ -12,10 +12,9 @@ import { editor } from 'monaco-editor';
 
 @Component({
   selector: 'ng-monaco-diff-editor',
-  template: `<div
-    class="ng-monaco-editor-wrapper ng-monaco-diff-editor"
-    #editorEl
-  ></div>`,
+  template: `
+    <div class="ng-monaco-editor-wrapper ng-monaco-diff-editor" #editorEl></div>
+  `,
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
