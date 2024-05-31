@@ -1,20 +1,24 @@
-# Monaco Editor for Angular 17+
+# 📚 Monaco Editor for Angular 17+
 
-This library wraps the well-known `monaco-editor` for easy use in Angular 17+. Feel free to contribute. Let's make it better!
+This library wraps the well-known `Monaco Editor` for easy use in Angular 17+. Feel free to contribute. Let's make it better!
 
-`It only supports Angular 17 and above versions.`
+## 🎯 Versions
+
+It only supports Angular 17 and above.
 
 ## ⚡ Setup
 
-### Install required dependencies
+### 📦 Install Required Dependencies
+
+First, install the necessary dependencies:
 
 ```
 npm i monaco-editor @1xtend/ng-monaco-editor
 ```
 
-### Import monaco-editor assets
+### 📁 Import Monaco Editor Assets
 
-Your application must have access to `monaco-editor` assets to work properly. To provide this access, you need to make the following changes to the `angular.json` file.
+Your application must have access to `Monaco Editor` assets to work properly. To provide this access, you need to make the following changes to the `angular.json` file:
 
 ```typescript
 {
@@ -30,16 +34,16 @@ Your application must have access to `monaco-editor` assets to work properly. To
 }
 ```
 
-### Provide config
+### ⚙️ Provide config
 
-You need to define and provide a `NG_MONACO_EDITOR_CONFIG` in your `app.config.ts`.
+You need to define and provide an `NG_MONACO_EDITOR_CONFIG` in your `app.config.ts`.
 
 ```typescript
 const config: NgMonacoEditorConfig = {
   /**
    * Optional.
    *
-   * Base URL to monaco-editor assets via AMD. By default it's "/assets", but you can change the path to assets in previous step.
+   * Base URL to Monaco Editor assets via AMD. By default, it's "/assets", but you can change the path to assets in the previous step.
    */
   baseUrl: "/lib/assets",
 
@@ -56,7 +60,7 @@ const config: NgMonacoEditorConfig = {
   /**
    * Optional.
    *
-   * This function is called when monaco is loaded.
+   * This function is called when Monaco is loaded.
    */
   onMonacoLoad: () => {
     /**
@@ -67,7 +71,7 @@ const config: NgMonacoEditorConfig = {
       noSemanticValidation: true,
     });
 
-    console.log("monaco has been loaded successfully!");
+    console.log("Monaco has been loaded successfully!");
   },
 
   /**
@@ -90,7 +94,9 @@ export const appConfig: ApplicationConfig = {
 
 ## ✨ Usage
 
-For both `ng-monaco-editor` and `ng-monaco-diff-editor` you need to create options. You can use `NgEditorOptions` interface.
+For both `ng-monaco-editor` and `ng-monaco-diff-editor`, you need to create options. You can use the `NgEditorOptions` interface.
+
+### Basic Example:
 
 ```typescript
 @Component({
@@ -118,7 +124,7 @@ export class MyEditor {
 <ng-monaco-diff-editor [options]="diffOptions"></ng-monaco-diff-editor>
 ```
 
-You can use both `Reactive` and `Template Driven` forms to control editors value.
+You can use both `Reactive` and `Template Driven` forms to control the editor's value.
 
 ### Reactive forms example:
 
@@ -162,7 +168,7 @@ export class MyEditor {
 <ng-monaco-editor [options]="options" [(ngModel)]="value"></ng-monaco-editor>
 ```
 
-Additionally `ng-monaco-diff-editor` has `originalValue` input to display its original value.
+Additionally, `ng-monaco-diff-editor` has an `originalValue` input to display its original value.
 
 ```typescript
 @Component({
@@ -186,7 +192,7 @@ export class MyEditor {
 
 ## 🎨 Styling
 
-Both `ng-monaco-editor` and `ng-monaco-diff-editor` have the same `ng-monaco-editor-wrapper` class. You can style component by using `::ng-deep`.
+Both `ng-monaco-editor` and `ng-monaco-diff-editor` have the same `ng-monaco-editor-wrapper` class. You can style the component by using `::ng-deep`.
 
 ```html
 <ng-monaco-editor [options]="options" class="my-editor"></ng-monaco-editor>
@@ -200,7 +206,7 @@ Both `ng-monaco-editor` and `ng-monaco-diff-editor` have the same `ng-monaco-edi
 }
 ```
 
-Also, editors have their own classes like `ng-monaco-editor` and `ng-monaco-diff-editor`
+Also, the editors have their own classes like `ng-monaco-editor` and `ng-monaco-diff-editor`.
 
 ## 🔗 Useful links
 
@@ -209,4 +215,4 @@ Also, editors have their own classes like `ng-monaco-editor` and `ng-monaco-diff
 
 ## 📃 License
 
-[MIT](./LICENSE) @[1xtend](https://github.com/1xtend)
+[MIT](https://github.com/1xtend/ng-monaco-editor/blob/master/license) @[1xtend](https://github.com/1xtend)
