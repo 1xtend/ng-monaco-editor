@@ -1,6 +1,6 @@
 {
   "name": "@1xtend/ng-monaco-editor",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "private": false,
   "description": "Monaco Editor for Angular 17+",
   "author": "Vladyslav Mezhevyi",
