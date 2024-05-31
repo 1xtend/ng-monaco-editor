@@ -209,4 +209,4 @@ Also, editors have their own classes like `ng-monaco-editor` and `ng-monaco-diff
 
 ## 📃 License
 
-[MIT](./LICENSE) @[1xtend](https://github.com/1xtend)
+[MIT](https://github.com/1xtend/ng-monaco-editor/blob/master/license) @[1xtend](https://github.com/1xtend)
