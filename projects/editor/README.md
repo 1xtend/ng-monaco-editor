@@ -2,7 +2,7 @@
 
 This library wraps the well-known `monaco-editor` for easy use in Angular 17+. Feel free to contribute. Let's make it better!
 
-> It only supports Angular 17 and above versions.
+`It only supports Angular 17 and above versions.`
 
 ## ⚡ Setup
 
@@ -184,7 +184,7 @@ export class MyEditor {
 <ng-monaco-diff-editor [options]="options" [(ngModel)]="value" [originalValue]="originalValue"></ng-monaco-diff-editor>
 ```
 
-### 🎨 Styling
+## 🎨 Styling
 
 Both `ng-monaco-editor` and `ng-monaco-diff-editor` have the same `ng-monaco-editor-wrapper` class. You can style component by using `::ng-deep`.
 
