@@ -16,7 +16,7 @@ First, install the necessary package:
 npm i @1xtend/ng-monaco-editor
 ```
 
-> monaco-editor package will be installed automatically, because it is specified in "peerDependencies".
+> monaco-editor package will be installed automatically, because it is specified in "dependencies".
 
 ### 📁 Import Monaco Editor Assets
 
