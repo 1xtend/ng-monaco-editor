@@ -1,11 +1,9 @@
 import { InjectionToken } from '@angular/core';
+import { NgEditorOptions } from './models/editor.types';
 
 export interface NgMonacoEditorConfig {
   baseUrl?: string;
-  defaultOptions?: {
-    theme?: 'vs-dark' | 'vs-light';
-    [key: string]: any;
-  };
+  defaultOptions?: NgEditorOptions;
   onMonacoLoad?: Function;
   autoLayoutInterval?: number;
 }

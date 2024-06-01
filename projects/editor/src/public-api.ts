@@ -1,6 +1,5 @@
-/*
- * Public API Surface of editor
- */
-
-export * from './lib/services/monaco-editor.service';
 export * from './lib/components/monaco-editor.component';
+export * from './lib/components/monaco-diff-editor.component';
+export * from './lib/models/editor.types';
+export * from './lib/models/global.types';
+export * from './lib/config';

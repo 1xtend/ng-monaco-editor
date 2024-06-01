@@ -3,6 +3,7 @@ import { NgEditorOptions } from '../../../editor/src/lib/models/editor.types';
 import { MonacoEditorComponent } from '../../../editor/src/public-api';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MonacoDiffEditorComponent } from '../../../editor/src/lib/components/monaco-diff-editor.component';
+
 @Component({
   selector: 'app-root',
   standalone: true,

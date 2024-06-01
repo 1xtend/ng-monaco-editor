@@ -1,15 +1,15 @@
 {
   "name": "@1xtend/ng-monaco-editor",
-  "version": "17.0.0",
+  "version": "1.0.11",
   "private": false,
   "description": "Monaco Editor for Angular 17+",
   "author": "Vladyslav Mezhevyi",
   "repository": {
     "type": "git",
-    "url": "https://github.com/1xtend/angular-monaco-editor.git"
+    "url": "https://github.com/1xtend/ng-monaco-editor.git"
   },
   "bugs": {
-    "url": "https://github.com/1xtend/angular-monaco-editor/issues"
+    "url": "https://github.com/1xtend/ng-monaco-editor/issues"
   },
   "contributors": [
     "Vladyslav Mezhevyi <vlad.mezhevyi@gmail.com>"
@@ -23,11 +23,11 @@
     "ng-monaco-editor"
   ],
   "peerDependencies": {
-    "@angular/common": "^17.0.3",
-    "@angular/core": "^17.0.3",
-    "monaco-editor": "^0.48.0"
+    "@angular/common": ">=17.0.3",
+    "@angular/core": ">=17.0.3"
   },
   "dependencies": {
-    "tslib": "^2.1.0"
+    "tslib": "^2.1.0",
+    "monaco-editor": ">=0.44.0"
   }
 }
