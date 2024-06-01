@@ -10,11 +10,13 @@ It only supports Angular 17 and above.
 
 ### 📦 Install Required Dependencies
 
-First, install the necessary dependencies:
+First, install the necessary package:
 
 ```
-npm i monaco-editor @1xtend/ng-monaco-editor
+npm i @1xtend/ng-monaco-editor
 ```
+
+> monaco-editor package will be installed automatically, because it is specified in "dependencies".
 
 ### 📁 Import Monaco Editor Assets
 

@@ -1,6 +1,6 @@
 {
   "name": "@1xtend/ng-monaco-editor",
-  "version": "1.0.6",
+  "version": "1.0.12",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -29,9 +29,8 @@
     "ng-monaco-editor"
   ],
   "peerDependencies": {
-    "@angular/common": "^17.0.3",
-    "@angular/core": "^17.0.3",
-    "monaco-editor": "^0.44.0"
+    "@angular/common": ">=17.0.3",
+    "@angular/core": ">=17.0.3"
   },
   "dependencies": {
     "@angular/animations": "^17.3.0",
