@@ -24,10 +24,10 @@
   ],
   "peerDependencies": {
     "@angular/common": ">=17.0.3",
-    "@angular/core": ">=17.0.3",
-    "monaco-editor": ">=0.44.0"
+    "@angular/core": ">=17.0.3"
   },
   "dependencies": {
-    "tslib": "^2.1.0"
+    "tslib": "^2.1.0",
+    "monaco-editor": ">=0.44.0"
   }
 }

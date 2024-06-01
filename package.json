@@ -30,8 +30,7 @@
   ],
   "peerDependencies": {
     "@angular/common": ">=17.0.3",
-    "@angular/core": ">=17.0.3",
-    "monaco-editor": ">=0.44.0"
+    "@angular/core": ">=17.0.3"
   },
   "dependencies": {
     "@angular/animations": "^17.3.0",
