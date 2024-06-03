@@ -30,4 +30,18 @@ export class AppComponent {
   diffEditorControl = new FormControl('const getValue = () => {}', {
     nonNullable: true,
   });
+
+  changeLanguage(): void {
+    if (this.editorOptions.language === 'html') {
+      this.editorOptions = {
+        ...this.editorOptions,
+        language: 'css',
+      };
+    } else {
+      this.editorOptions = {
+        ...this.editorOptions,
+        language: 'html',
+      };
+    }
+  }
 }

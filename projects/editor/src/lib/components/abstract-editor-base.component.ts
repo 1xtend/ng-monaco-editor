@@ -89,7 +89,7 @@ export abstract class AbstractEditorBaseComponent
       !this.isEqual(options.previousValue, options.currentValue)
     ) {
       this._options = options.currentValue as NgEditorOptions;
-      this.rootEditor?.updateOptions(this._options);
+      this.loadEditor();
     }
   }
 
