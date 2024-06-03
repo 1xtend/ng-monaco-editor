@@ -14,7 +14,7 @@ export class MonacoEditorService {
   private config: NgMonacoEditorConfig = inject(NG_MONACO_EDITOR_CONFIG);
 
   private _monaco?: Monaco;
-  private _loadedMonaco?: Promise<Monaco>;
+  private _monacoPromise?: Promise<Monaco>;
 
   get monaco(): Monaco {
     return (this._monaco || window.monaco)!;
@@ -25,41 +25,51 @@ export class MonacoEditorService {
   }
 
   initMonaco(): Promise<Monaco> {
-    return this._loadedMonaco || (this._loadedMonaco = this.loadMonaco());
+    return this._monacoPromise || (this._monacoPromise = this.loadMonaco());
   }
 
   private loadMonacoModule(deps: string[]) {
-    return new Promise<Monaco>((resolve) => this.require!(deps, resolve));
+    return new Promise<Monaco>((resolve, reject) => {
+      if (this.require) {
+        this.require(deps, resolve);
+      } else {
+        reject(new Error('RequireJS is not available.'));
+      }
+    });
   }
 
   private async getAmdLoader(baseUrl: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      if (this.monaco && this.require) {
-        return resolve();
-      }
+    if (this.monaco && this.require) {
+      return;
+    }
 
+    return new Promise<void>((resolve, reject) => {
       const loaderScript = document.createElement('script');
       loaderScript.type = 'text/javascript';
       loaderScript.src = `${baseUrl}/monaco-editor/min/vs/loader.js`;
       loaderScript.addEventListener('load', () => {
-        this.require?.config({
-          baseUrl,
-          paths: { vs: `${baseUrl}/monaco-editor/min/vs` },
-        });
-
-        resolve();
+        if (this.require) {
+          this.require.config({
+            baseUrl,
+            paths: { vs: `${baseUrl}/monaco-editor/min/vs` },
+          });
+          resolve();
+        } else {
+          reject(new Error('RequireJS is not available after script load.'));
+        }
       });
-      loaderScript.addEventListener('error', reject);
+
       document.body.append(loaderScript);
     }).catch((error) => {
       throw new ReferenceError(
-        `Check if you have imported 'monaco-editor' into ${baseUrl} folder.`
+        `Check if you have imported 'monaco-editor' into ${baseUrl} folder. Error: ${error.message}`
       );
     });
   }
 
   private async loadMonaco(): Promise<Monaco> {
     await this.getAmdLoader(this.config.baseUrl || '/assets');
+
     return this.loadMonacoModule(['vs/editor/editor.main']).then((monaco) => {
       this._monaco = monaco;
 

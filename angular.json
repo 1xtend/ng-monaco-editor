@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-monaco-editor": {
+    "ng-monaco-editor": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/angular-monaco-editor",
+            "outputPath": "dist/ng-monaco-editor",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -50,10 +50,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular-monaco-editor:build:production"
+              "buildTarget": "ng-monaco-editor:build:production"
             },
             "development": {
-              "buildTarget": "angular-monaco-editor:build:development"
+              "buildTarget": "ng-monaco-editor:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -61,7 +61,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "angular-monaco-editor:build"
+            "buildTarget": "ng-monaco-editor:build"
           }
         },
         "test": {

@@ -45,7 +45,7 @@ export abstract class AbstractEditorBaseComponent
   protected _options?: NgEditorOptions;
   protected _uri?: string;
   protected _disposables: IDisposable[] = [];
-  protected _isMonacoLoaded: boolean = false;
+  protected _loadedMonaco: boolean = false;
   protected _rootEditor?: editor.IEditor;
 
   options = input<NgEditorOptions>();
@@ -106,11 +106,11 @@ export abstract class AbstractEditorBaseComponent
   }
 
   protected async loadEditor(): Promise<void> {
-    if (this._isMonacoLoaded) {
+    if (this._loadedMonaco) {
       this.dispose();
     } else {
       await this.loadMonaco();
-      this._isMonacoLoaded = true;
+      this._loadedMonaco = true;
     }
 
     const editor = this.editorRef()?.nativeElement;
