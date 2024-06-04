@@ -22,21 +22,9 @@ npm i @1xtend/ng-monaco-editor
 
 Your application must have access to `Monaco Editor` assets to work properly. To provide this access, you need to make the following changes to the `angular.json` file:
 
-```json
+```
 {
-  "assets": [
-    "src/favicon.ico",
-    "src/assets",
-    {
-      "glob": "**/*",
-      "input": "node_modules/monaco-editor/min",
-      "output": "assets/monaco-editor/min"
-    }
-  ],
-}
-
-{
-  "your-app": {
+  "app-name": {
     ...
     "architect": {
       ...
