@@ -39,6 +39,11 @@ Your application must have access to `Monaco Editor` assets to work properly. To
               "glob": "**/*",
               "input": "node_modules/monaco-editor/min",
               "output": "assets/monaco-editor/min"
+            },
+            {
+              "glob": "**/*",
+              "input": "node_modules/monaco-editor/min-maps",
+              "output": "assets/monaco-editor/min-maps"
             }
           ]
         }
