@@ -44,4 +44,11 @@ export class AppComponent {
       };
     }
   }
+
+  changeNothing(): void {
+    this.editorOptions = {
+      language: 'html',
+      theme: 'vs-dark',
+    };
+  }
 }

@@ -1,10 +1,14 @@
 import {
+  AfterViewInit,
   Component,
   DestroyRef,
   ElementRef,
   OnDestroy,
   OnInit,
   SimpleChanges,
+  ValueEqualityFn,
+  computed,
+  effect,
   inject,
   input,
   output,
@@ -42,14 +46,18 @@ export abstract class AbstractEditorBaseComponent
   protected _editor?: NgEditor;
   protected _value: string = '';
   protected _model?: NgEditorModel;
-  protected _options?: NgEditorOptions;
-  protected _uri?: string;
+  // protected _options?: NgEditorOptions;
+  // protected _uri?: string;
   protected _disposables: IDisposable[] = [];
   protected _loadedMonaco: boolean = false;
   protected _rootEditor?: editor.IEditor;
 
   options = input<NgEditorOptions>();
   uri = input<string>('');
+
+  _options = computed<NgEditorOptions | undefined>(() => this.options(), {
+    equal: this.isEqual,
+  });
 
   loading = output<boolean>();
   editorLoad = output<NgEditor>();
@@ -70,27 +78,48 @@ export abstract class AbstractEditorBaseComponent
     uri?: string
   ): NgEditor;
 
-  ngOnInit(): void {
-    this._options = this.options();
-    this._uri = this.uri();
+  constructor() {
+    // effect(() => {
+    //   this._options = this.options();
+    //   this._uri = this.uri();
+    //   console.log('inputs were changed: ', this._options, this._uri);
+    //   if (!this.isEqual()) this.loadEditor();
+    // });
 
-    this.loadEditor();
+    effect(() => {
+      const options = this._options();
+      const uri = this.uri();
+
+      console.log('effect was called');
+
+      this.loadEditor(options, uri);
+    });
   }
 
-  ngOnChanges({ options, uri }: SimpleChanges): void {
-    if (uri && !uri.isFirstChange()) {
-      this._uri = uri.currentValue;
-      this.loadEditor();
-    }
+  ngOnInit(): void {
+    // this.loadEditor();
+  }
 
-    if (
-      options &&
-      !options.isFirstChange() &&
-      !this.isEqual(options.previousValue, options.currentValue)
-    ) {
-      this._options = options.currentValue as NgEditorOptions;
-      this.loadEditor();
-    }
+  // ngOnInit(): void {
+  //   this._options = this.options();
+  //   this._uri = this.uri();
+
+  //   this.loadEditor();
+  // }
+
+  ngOnChanges({ options, uri }: SimpleChanges): void {
+    // if (uri && !uri.isFirstChange()) {
+    //   this._uri = uri.currentValue;
+    //   this.loadEditor();
+    // }
+    // if (
+    //   options &&
+    //   !options.isFirstChange() &&
+    //   !this.isEqual(options.previousValue, options.currentValue)
+    // ) {
+    //   this._options = options.currentValue as NgEditorOptions;
+    //   this.loadEditor();
+    // }
   }
 
   ngOnDestroy(): void {
@@ -105,7 +134,10 @@ export abstract class AbstractEditorBaseComponent
     });
   }
 
-  protected async loadEditor(): Promise<void> {
+  protected async loadEditor(
+    options?: NgEditorOptions,
+    uri?: string
+  ): Promise<void> {
     if (this._loadedMonaco) {
       this.dispose();
     } else {
@@ -117,7 +149,7 @@ export abstract class AbstractEditorBaseComponent
 
     if (!editor) return;
 
-    this._editor = this.createEditor(editor, this._options, this._uri);
+    this._editor = this.createEditor(editor, options, uri);
     this.resizeEditor(editor);
     this.listenToModelChanges();
     this.editorLoad.emit(this._editor);
@@ -127,7 +159,11 @@ export abstract class AbstractEditorBaseComponent
     const parsedUri = uri ? monaco.Uri.parse(uri) : undefined;
     const model = parsedUri && monaco.editor.getModel(parsedUri);
     model?.dispose();
-    return monaco.editor.createModel(value, this._options?.language, parsedUri);
+    return monaco.editor.createModel(
+      value,
+      this._options()?.language,
+      parsedUri
+    );
   }
 
   protected resizeEditor(editor: HTMLElement): void {
@@ -198,7 +234,17 @@ export abstract class AbstractEditorBaseComponent
     }
   }
 
-  protected isEqual(item1: unknown, item2: unknown): boolean {
-    return JSON.stringify(item1) === JSON.stringify(item2);
+  protected isEqual<T extends NgEditorOptions | undefined>(
+    a: T,
+    b: T
+  ): boolean {
+    if (!a || !b) {
+      return a === b;
+    }
+
+    const itemA = Object.entries(a).sort().toString();
+    const itemB = Object.entries(b).sort().toString();
+
+    return itemA === itemB;
   }
 }
