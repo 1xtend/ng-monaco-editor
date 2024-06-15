@@ -44,4 +44,13 @@ export class AppComponent {
       };
     }
   }
+
+  changeNothing(): void {
+    this.editorOptions = this.editorOptions;
+  }
+
+  changeOriginalValue(): void {
+    this.diffOriginalValue = Math.random().toString();
+    // this.diffOriginalValue = this.diffOriginalValue;
+  }
 }

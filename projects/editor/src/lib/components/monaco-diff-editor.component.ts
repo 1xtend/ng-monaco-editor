@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  SimpleChanges,
+  effect,
   forwardRef,
   input,
 } from '@angular/core';
@@ -39,16 +39,39 @@ import { editor } from 'monaco-editor';
   ],
 })
 export class MonacoDiffEditorComponent extends AbstractEditorBaseComponent {
-  originalValue = input<string>('');
+  originalValue = input.required<string>();
 
-  protected _originalModel?: editor.ITextModel;
+  private _originalModel?: editor.ITextModel;
+
+  constructor() {
+    super();
+
+    effect(() => {
+      const options = this._options();
+      const uri = this.uri();
+      const originalValue = this.originalValue();
+
+      this.loadEditor(options, uri, originalValue);
+    });
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this._originalModel?.dispose();
+    this._originalModel = undefined;
+  }
 
   protected createEditor(
     el: HTMLElement,
     options?: NgEditorOptions,
-    uri?: string
+    uri?: string,
+    originalValue?: string
   ): NgEditor {
-    this._originalModel = this.createModel(this.originalValue());
+    if (!originalValue) {
+      throw new Error('Diff editor requires originalValue');
+    }
+
+    this._originalModel = this.createModel(originalValue);
     this._model = this.createModel(this.value, uri);
 
     const editor = this.monacoEditorService.createDiffEditor(el, options);
@@ -61,26 +84,5 @@ export class MonacoDiffEditorComponent extends AbstractEditorBaseComponent {
     });
 
     return editor.getModifiedEditor();
-  }
-
-  override ngOnChanges(changes: SimpleChanges): void {
-    super.ngOnChanges(changes);
-
-    const { originalValue } = changes;
-
-    if (
-      originalValue &&
-      !originalValue.isFirstChange() &&
-      originalValue.previousValue !== originalValue.currentValue
-    ) {
-      this._originalModel?.dispose();
-      this.loadEditor();
-    }
-  }
-
-  override ngOnDestroy(): void {
-    super.ngOnDestroy();
-    this._originalModel?.dispose();
-    this._originalModel = undefined;
   }
 }

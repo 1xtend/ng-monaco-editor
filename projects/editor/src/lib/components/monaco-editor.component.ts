@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  forwardRef,
+} from '@angular/core';
 import { NgEditor, NgEditorOptions } from '../models/editor.types';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AbstractEditorBaseComponent } from './abstract-editor-base.component';
@@ -32,6 +37,17 @@ import { AbstractEditorBaseComponent } from './abstract-editor-base.component';
   ],
 })
 export class MonacoEditorComponent extends AbstractEditorBaseComponent {
+  constructor() {
+    super();
+
+    effect(() => {
+      const options = this._options();
+      const uri = this.uri();
+
+      this.loadEditor(options, uri);
+    });
+  }
+
   protected createEditor(
     el: HTMLElement,
     options?: NgEditorOptions,
