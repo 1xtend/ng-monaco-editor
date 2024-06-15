@@ -51,10 +51,6 @@ export class MonacoDiffEditorComponent extends AbstractEditorBaseComponent {
       const uri = this.uri();
       const originalValue = this.originalValue();
 
-      if (this._originalModel?.getValue() === originalValue) {
-        return;
-      }
-
       this.loadEditor(options, uri, originalValue);
     });
   }
