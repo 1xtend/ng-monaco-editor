@@ -1,14 +1,9 @@
 import {
-  AfterViewInit,
   Component,
   DestroyRef,
   ElementRef,
   OnDestroy,
-  OnInit,
-  SimpleChanges,
-  ValueEqualityFn,
   computed,
-  effect,
   inject,
   input,
   output,
@@ -35,7 +30,7 @@ declare const monaco: Monaco;
   template: '',
 })
 export abstract class AbstractEditorBaseComponent
-  implements OnDestroy, ControlValueAccessor, OnInit
+  implements OnDestroy, ControlValueAccessor
 {
   private destroyRef = inject(DestroyRef);
   protected monacoEditorService = inject(MonacoEditorService);
@@ -46,8 +41,6 @@ export abstract class AbstractEditorBaseComponent
   protected _editor?: NgEditor;
   protected _value: string = '';
   protected _model?: NgEditorModel;
-  // protected _options?: NgEditorOptions;
-  // protected _uri?: string;
   protected _disposables: IDisposable[] = [];
   protected _loadedMonaco: boolean = false;
   protected _rootEditor?: editor.IEditor;
@@ -75,52 +68,9 @@ export abstract class AbstractEditorBaseComponent
   protected abstract createEditor(
     el: HTMLElement,
     options?: NgEditorOptions,
-    uri?: string
+    uri?: string,
+    originalValue?: string
   ): NgEditor;
-
-  constructor() {
-    // effect(() => {
-    //   this._options = this.options();
-    //   this._uri = this.uri();
-    //   console.log('inputs were changed: ', this._options, this._uri);
-    //   if (!this.isEqual()) this.loadEditor();
-    // });
-
-    effect(() => {
-      const options = this._options();
-      const uri = this.uri();
-
-      console.log('effect was called');
-
-      this.loadEditor(options, uri);
-    });
-  }
-
-  ngOnInit(): void {
-    // this.loadEditor();
-  }
-
-  // ngOnInit(): void {
-  //   this._options = this.options();
-  //   this._uri = this.uri();
-
-  //   this.loadEditor();
-  // }
-
-  ngOnChanges({ options, uri }: SimpleChanges): void {
-    // if (uri && !uri.isFirstChange()) {
-    //   this._uri = uri.currentValue;
-    //   this.loadEditor();
-    // }
-    // if (
-    //   options &&
-    //   !options.isFirstChange() &&
-    //   !this.isEqual(options.previousValue, options.currentValue)
-    // ) {
-    //   this._options = options.currentValue as NgEditorOptions;
-    //   this.loadEditor();
-    // }
-  }
 
   ngOnDestroy(): void {
     this.dispose();
@@ -136,7 +86,8 @@ export abstract class AbstractEditorBaseComponent
 
   protected async loadEditor(
     options?: NgEditorOptions,
-    uri?: string
+    uri?: string,
+    originalValue?: string
   ): Promise<void> {
     if (this._loadedMonaco) {
       this.dispose();
@@ -146,10 +97,9 @@ export abstract class AbstractEditorBaseComponent
     }
 
     const editor = this.editorRef()?.nativeElement;
-
     if (!editor) return;
 
-    this._editor = this.createEditor(editor, options, uri);
+    this._editor = this.createEditor(editor, options, uri, originalValue);
     this.resizeEditor(editor);
     this.listenToModelChanges();
     this.editorLoad.emit(this._editor);

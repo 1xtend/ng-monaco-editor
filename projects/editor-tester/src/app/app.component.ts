@@ -46,9 +46,11 @@ export class AppComponent {
   }
 
   changeNothing(): void {
-    this.editorOptions = {
-      language: 'html',
-      theme: 'vs-dark',
-    };
+    this.editorOptions = this.editorOptions;
+  }
+
+  changeOriginalValue(): void {
+    this.diffOriginalValue = Math.random().toString();
+    // this.diffOriginalValue = this.diffOriginalValue;
   }
 }
